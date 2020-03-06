@@ -52,7 +52,7 @@ const router = new VueRouter({
       component: () => import('@/views/manager/branch/AddPage'),
     },
     {
-      path: '/manager/branch-update',
+      path: '/manager/branch-update/:id',
       component: () => import('@/views/manager/branch/UpdatePage'),
     },
     {

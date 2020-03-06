@@ -6,8 +6,19 @@ function saveUserToCookie(value) {
   document.cookie = `user=${value}`;
 }
 
+function saveUserIdToCookie(value) {
+  document.cookie = `user_id=${value}`;
+}
+
 function saveCompanyToCookie(value) {
   document.cookie = `company=${value}`;
+}
+
+function getUserIdFromCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)user_id\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  );
 }
 
 function getAuthFromCookie() {
@@ -39,8 +50,10 @@ export {
   saveCompanyToCookie,
   saveAuthCookie,
   saveUserToCookie,
+  saveUserIdToCookie,
   getUserFromCookie,
   getAuthFromCookie,
+  getUserIdFromCookie,
   getCompanyFromCookie,
   deleteCookie,
 };

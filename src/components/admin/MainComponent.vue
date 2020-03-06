@@ -77,20 +77,18 @@
 </template>
 
 <script>
-import { selectCompanyList, deleteCompany } from '@/api/company';
+import { selectCompanyList, deleteCompanyById } from '@/api/company';
 export default {
   name: 'MainComponent',
   methods: {
     async deleteItem(id) {
       try {
         if (confirm('정말로 삭제하시겠습니까?')) {
-          await deleteCompany(id);
+          await deleteCompanyById(id);
           this.$router.go();
-          // this.companyList = '';
-          // await this.getCompanyList();
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.message);
       }
     },
     updateItem(id) {
@@ -113,7 +111,7 @@ export default {
           this.companyList.push(company);
         }
       } catch (error) {
-        console.log(error.data.response.message);
+        console.log(error.message);
       }
     },
   },

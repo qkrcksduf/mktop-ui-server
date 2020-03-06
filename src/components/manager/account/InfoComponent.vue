@@ -12,7 +12,7 @@
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-account"
-                    value="홍길동"
+                    v-model="name"
                     placeholder="이름"
                   >
                   </v-text-field>
@@ -20,30 +20,59 @@
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-key"
-                    value="test@test.com"
+                    v-model="username"
                     placeholder="아이디(이메일 형식)"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!usernameValid && username">
+                      Please enter an email address
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-email"
-                    value="test@test.com"
+                    v-model="email"
                     placeholder="email"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!emailValid && email">
+                      Please enter an email address
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-phone"
-                    value="010-1234-5678"
+                    v-model="phoneNumber"
                     placeholder="010-0000-0000"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!phoneNumberValid && phoneNumber">
+                      Please enter an phoneNumber
+                    </span>
+                  </p>
                 </v-flex>
               </v-layout>
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="updateInfo">Save</v-btn>
+              <v-btn
+                :disabled="
+                  !usernameValid ||
+                    !emailValid ||
+                    !phoneNumberValid ||
+                    !email ||
+                    !username ||
+                    !phoneNumber ||
+                    !name
+                "
+                text
+                color="primary"
+                @click="updateInfo"
+                >Save</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -52,18 +81,66 @@
   </v-content>
 </template>
 <script>
+import { getUserIdFromCookie } from '@/utils/cookies';
+import { selectAccountById, updateInfoById } from '@/api/accunt';
+import { validatePhoneNumber, validateEmail } from '@/utils/validation';
+
 export default {
   name: 'AccountComponent',
   data() {
     return {
-      name,
+      id: '',
+      name: '',
+      username: '',
+      email: '',
+      phoneNumber: '',
     };
   },
+  async created() {
+    try {
+      this.id = getUserIdFromCookie();
+      const { data } = await selectAccountById(this.id);
+      this.name = data.account.name;
+      this.username = data.account.username;
+      this.email = data.account.email;
+      this.phoneNumber = data.account.phoneNumber;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  computed: {
+    emailValid() {
+      return validateEmail(this.email);
+    },
+    usernameValid() {
+      return validateEmail(this.username);
+    },
+
+    phoneNumberValid() {
+      return validatePhoneNumber(this.phoneNumber);
+    },
+  },
+
   methods: {
     cancel() {
       this.$router.push('/manager/main');
     },
-    updateInfo() {},
+    async updateInfo() {
+      try {
+        const { data } = await updateInfoById({
+          id: this.id,
+          name: this.name,
+          username: this.username,
+          email: this.email,
+          phoneNumber: this.phoneNumber,
+        });
+        console.log(data);
+        this.$router.push('/manager/main');
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

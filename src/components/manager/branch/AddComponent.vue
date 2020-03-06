@@ -10,29 +10,49 @@
             <v-container grid-list-sm>
               <v-layout row wrap>
                 <v-flex xs12>
-                  <v-layout align-center>
-                    <v-text-field
-                      prepend-icon="mdi-account"
-                      placeholder="이름"
-                    ></v-text-field>
-                  </v-layout>
+                  <v-text-field
+                    prepend-icon="mdi-domain"
+                    v-model="branchName"
+                    placeholder="지점 이름"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-domain"
-                    placeholder="지점 이름"
+                    v-model="username"
+                    prepend-icon="mdi-email"
+                    placeholder="아이디(이메일 형식)"
+                  ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!userNameValid && username">
+                      Please enter an email address
+                    </span>
+                  </p>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field
+                    v-model="password"
+                    type="password"
+                    prepend-icon="mdi-lock"
+                    placeholder="비밀번호"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
                     type="tel"
                     prepend-icon="mdi-phone"
+                    v-model="phoneNumber"
                     placeholder="010 - 0000 - 0000"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!phoneNumberValid && phoneNumber">
+                      Please enter an phoneNumber
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-note"
+                    v-model="address"
                     placeholder="주소"
                   ></v-text-field>
                 </v-flex>
@@ -41,8 +61,22 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="save">Create</v-btn>
+              <v-btn
+                :disabled="
+                  !phoneNumber ||
+                    !username ||
+                    !password ||
+                    !branchName ||
+                    !address ||
+                    !phoneNumberValid
+                "
+                text
+                color="primary"
+                @click="insert"
+                >Create</v-btn
+              >
             </v-card-actions>
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -51,15 +85,85 @@
 </template>
 
 <script>
+import { validatePhoneNumber } from '@/utils/validation';
+import { insertAccount } from '@/api/accunt';
+import { insertBranch } from '@/api/branch';
+import { validateEmail } from '@/utils/validation';
+
 export default {
   name: 'CompanyAddForm',
+
+  data() {
+    return {
+      logMessage: '',
+      id: '',
+      branchName: '',
+      username: '',
+      password: '',
+      phoneNumber: '',
+      address: '',
+    };
+  },
+  computed: {
+    phoneNumberValid() {
+      return validatePhoneNumber(this.phoneNumber);
+    },
+
+    userNameValid() {
+      return validateEmail(this.username);
+    },
+  },
   methods: {
     cancel() {
-      console.log('calcel');
+      console.log('cancel');
       this.$router.push('/manager/branch');
     },
-    save() {
-      console.log('save');
+
+    createText() {
+      let text = '';
+      let possible =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+    },
+
+    async insert() {
+      try {
+        await this.insertAccount();
+        await this.insertBranch();
+        this.$router.push('/manager/branch');
+      } catch (error) {
+        console.log(error.response.data.message);
+        this.logMessage = error.response.data.message;
+      }
+    },
+
+    async insertAccount() {
+      const { data } = await insertAccount({
+        authority: 'branch',
+        phoneNumber: '010-1234-1234',
+        email: `${this.createText()}@text.com`,
+        name: '홍길동',
+        username: this.username,
+        password: this.password,
+      });
+      console.log(data);
+      console.log(data.id);
+      this.id = data.id;
+      console.log(this.id);
+    },
+
+    async insertBranch() {
+      const { data } = await insertBranch({
+        accountId: this.id,
+        name: this.branchName,
+        phoneNumber: this.phoneNumber,
+        address: this.address,
+      });
+      console.log(data);
     },
   },
 };

@@ -23,6 +23,11 @@
                     v-model="phoneNumber"
                     placeholder="010-0000-0000"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!phoneNumberValid && phoneNumber">
+                      Please enter an phoneNumber
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
@@ -37,8 +42,17 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="save">Save</v-btn>
+              <v-btn
+                :disabled="
+                  !phoneNumber || !address || !name || !phoneNumberValid
+                "
+                text
+                color="primary"
+                @click="update"
+                >Save</v-btn
+              >
             </v-card-actions>
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -47,13 +61,15 @@
 </template>
 
 <script>
-import { selectCompany } from '@/api/company';
+import { selectCompanyById, updateCompanyById } from '@/api/company';
 import { getCompanyFromCookie } from '@/utils/cookies';
+import { validatePhoneNumber } from '@/utils/validation';
 
 export default {
   name: 'CompanyComponent',
   data() {
     return {
+      logMessage: '',
       companyId: '',
       name: '',
       phoneNumber: '',
@@ -62,19 +78,39 @@ export default {
   },
 
   async created() {
-    console.log('created');
-    this.companyId = getCompanyFromCookie();
-    console.log(this.companyId);
-    const { data } = await selectCompany(this.companyId);
-    console.log(data);
+    try {
+      this.id = getCompanyFromCookie();
+      const { data } = await selectCompanyById(this.id);
+      this.name = data.name;
+      this.phoneNumber = data.phoneNumber;
+      this.address = data.address;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  computed: {
+    phoneNumberValid() {
+      return validatePhoneNumber(this.phoneNumber);
+    },
   },
 
   methods: {
     cancel() {
       this.$router.push('/manager/main');
     },
-    save() {
-      console.log('update');
+    async update() {
+      try {
+        await updateCompanyById({
+          id: this.id,
+          name: this.name,
+          phoneNumber: this.phoneNumber,
+          address: this.address,
+        });
+        this.$router.push('/manager/main');
+      } catch (error) {
+        this.logMessage = error;
+      }
     },
   },
 };

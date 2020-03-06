@@ -9,7 +9,7 @@
 import CompanyComponent from '@/components/manager/company/UpdateComponent';
 import LayoutComponent from '@/components/manager/common/LayoutComponent';
 export default {
-  name: 'CompnayPage',
+  name: 'UpdatePage',
   components: { LayoutComponent, CompanyComponent },
 };
 </script>

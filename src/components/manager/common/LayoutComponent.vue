@@ -52,11 +52,9 @@
 
     <v-app-bar :clipped-left="true" app dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!--      <router-link>-->
       <v-toolbar-title style="color: white">
         <v-btn style="font-size: 20px" @click="logoLink">MKTOP</v-btn>
       </v-toolbar-title>
-      <!--      </router-link>-->
       <v-spacer></v-spacer>
       <span v-if="isLogin">
         <h3>{{ $store.state.name }}님</h3>
@@ -111,6 +109,9 @@ export default {
     },
   },
   methods: {
+    test() {
+      console.log('test');
+    },
     logoLink() {
       try {
         return this.$store.getters.isLogin

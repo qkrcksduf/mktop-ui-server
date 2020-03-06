@@ -11,30 +11,57 @@
               <v-layout row wrap>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-account"
+                    prepend-icon="mdi-account-key"
+                    type="password"
+                    v-model="currentPassword"
                     placeholder="현재 비밀번호"
                   >
                   </v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-account-key"
+                    prepend-icon="mdi-account"
+                    type="password"
+                    v-model="changePassword"
                     placeholder="새 비밀번호"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-account-check"
+                    prepend-icon="mdi-account"
+                    type="password"
+                    v-model="checkChangePassword"
                     placeholder="새 비밀번호 확인"
                   ></v-text-field>
                 </v-flex>
+                <span
+                  class="warn"
+                  v-if="
+                    checkChangePassword &&
+                      changePassword !== checkChangePassword
+                  "
+                >
+                  Please enter an email address
+                </span>
               </v-layout>
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="save">Save</v-btn>
+              <v-btn
+                :disabled="
+                  !currentPassword ||
+                    !changePassword ||
+                    !checkChangePassword ||
+                    changePassword !== checkChangePassword
+                "
+                text
+                color="primary"
+                @click="updatePassword"
+                >Save</v-btn
+              >
             </v-card-actions>
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -43,9 +70,33 @@
 </template>
 
 <script>
+import { updatePassword } from '@/api/accunt';
+
 export default {
   name: 'PasswordComponent',
+  data() {
+    return {
+      logMessage: '',
+      currentPassword: '',
+      changePassword: '',
+      checkChangePassword: '',
+    };
+  },
   methods: {
+    async updatePassword() {
+      try {
+        console.log('updatePassword');
+        await updatePassword({
+          currentPassword: this.currentPassword,
+          changePassword: this.changePassword,
+          checkChangePassword: this.checkChangePassword,
+        });
+        this.$router.push('/manager/main');
+      } catch (error) {
+        console.log(error);
+        this.logMessage = error;
+      }
+    },
     cancel() {
       this.$router.push('/manager/main');
     },

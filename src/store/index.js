@@ -9,6 +9,7 @@ export default new Vuex.Store({
     name: getUserFromCookie() || '',
     token: getAuthFromCookie() || '',
     drawer: true,
+    mainPage: false,
   },
   getters: {
     getDrawer(state) {
@@ -17,10 +18,16 @@ export default new Vuex.Store({
     isLogin(state) {
       return state.name !== '';
     },
+    isMain(state) {
+      return state.main;
+    },
   },
   mutations: {
     clearToken(state) {
       state.token = '';
+    },
+    setMain(state) {
+      state.mainPage = !state.mainPage;
     },
     setToken(state, token) {
       state.token = token;

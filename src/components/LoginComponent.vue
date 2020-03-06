@@ -39,7 +39,7 @@
                   color="deep-purple accent-4"
                   white
                   type="submit"
-                  class="btn"
+                  style="color: white"
                   >Login</v-btn
                 >
               </v-card-actions>
@@ -58,6 +58,7 @@ import {
   saveAuthCookie,
   saveUserToCookie,
   saveCompanyToCookie,
+  saveUserIdToCookie,
 } from '@/utils/cookies';
 
 export default {
@@ -92,10 +93,12 @@ export default {
           this.$router.push('/admin/main');
         } else if (data.authority === 'company_admin') {
           saveCompanyToCookie(data.companyId);
+          console.log('accountId:' + data.id);
+          saveUserIdToCookie(data.id);
           this.$router.push('/manager/main');
         }
       } catch (error) {
-        this.logMessage = error.data;
+        this.logMessage = error.response.data.message;
       } finally {
         this.initForm();
       }
@@ -108,21 +111,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.validation-text {
-  color: #ff4057;
-  margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-.warn {
-  color: #ff4057;
-}
-.btn {
-  color: white;
-}
-</style>
+<style scoped></style>
