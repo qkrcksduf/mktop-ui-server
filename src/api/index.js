@@ -14,7 +14,7 @@ function createInstanceWithAuth(url) {
   return setInterceptors(instance);
 }
 
-export const branches = createInstanceWithAuth('api');
-export const accounts = createInstanceWithAuth('api');
-export const companies = createInstanceWithAuth('api');
-export const instance = createInstance('api');
+export const branches = createInstanceWithAuth('/branches');
+export const accounts = createInstanceWithAuth('/accounts');
+export const companies = createInstanceWithAuth('/companies');
+export const instance = createInstance('/auth');

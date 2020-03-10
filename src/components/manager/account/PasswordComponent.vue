@@ -82,6 +82,7 @@ export default {
       checkChangePassword: '',
     };
   },
+
   methods: {
     async updatePassword() {
       try {
@@ -97,6 +98,7 @@ export default {
         this.logMessage = error;
       }
     },
+
     cancel() {
       this.$router.push('/manager/main');
     },

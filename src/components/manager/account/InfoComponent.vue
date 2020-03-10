@@ -96,6 +96,7 @@ export default {
       phoneNumber: '',
     };
   },
+
   async created() {
     try {
       this.id = getUserIdFromCookie();
@@ -113,6 +114,7 @@ export default {
     emailValid() {
       return validateEmail(this.email);
     },
+
     usernameValid() {
       return validateEmail(this.username);
     },
@@ -126,6 +128,7 @@ export default {
     cancel() {
       this.$router.push('/manager/main');
     },
+
     async updateInfo() {
       try {
         const { data } = await updateInfoById({

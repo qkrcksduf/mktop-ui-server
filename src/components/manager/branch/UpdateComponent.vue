@@ -74,6 +74,7 @@ export default {
       this.logMessage = error.response.data.message;
     }
   },
+
   data() {
     return {
       id: '',
@@ -83,11 +84,13 @@ export default {
       logMessage: '',
     };
   },
+
   computed: {
     phoneNumberValid() {
       return validatePhoneNumber(this.phoneNumber);
     },
   },
+
   methods: {
     async getBranch() {
       const { data } = await selectBranchById(this.id);
@@ -96,9 +99,10 @@ export default {
       this.phoneNumber = data.phoneNumber;
       this.branchName = data.name;
     },
+
     async update() {
       try {
-        const { data } = await updateBranchById({
+        await updateBranchById({
           id: this.id,
           name: this.branchName,
           phoneNumber: this.phoneNumber,
@@ -109,9 +113,11 @@ export default {
         this.logMessage = error.response.data.message;
       }
     },
+
     cancel() {
       this.$router.push('/manager/branch');
     },
+
     click() {
       console.log('click');
     },

@@ -38,7 +38,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="item.uuid" v-for="item in companyList">
+                <tr :key="i" v-for="(item, i) in getCurrentPageList">
                   <td class="font-weight-bold">{{ item.no }}</td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.phoneNumber }}</td>
@@ -66,9 +66,9 @@
         <br /><br />
         <div class="text-center">
           <v-pagination
-            :length="5"
-            circle
-            v-model="companyList.no"
+            v-model="currentPage"
+            :length="maxPage"
+            :total-visible="totalVisible"
           ></v-pagination>
         </div>
       </v-flex>
@@ -80,6 +80,14 @@
 import { selectCompanyList, deleteCompanyById } from '@/api/company';
 export default {
   name: 'MainComponent',
+  computed: {
+    getCurrentPageList() {
+      const start = (this.currentPage - 1) * this.pagePerItemCount;
+      const end = start + this.pagePerItemCount;
+      return this.companyList.slice(start, end);
+    },
+  },
+
   methods: {
     async deleteItem(id) {
       try {
@@ -88,17 +96,19 @@ export default {
           this.$router.go();
         }
       } catch (error) {
+        alert(error.response.data.message);
         console.log(error.response.data.message);
       }
     },
+
     updateItem(id) {
       this.$router.push(`/admin/company-update/${id}`);
     },
     async getCompanyList() {
       try {
         const { data } = await selectCompanyList();
-        console.log(data);
-
+        this.length = data.length;
+        console.log(this.length);
         for (let i = 0; i < data.length; i++) {
           let company = {
             no: i + 1,
@@ -109,18 +119,37 @@ export default {
             admin: data[i].admin.name,
           };
           this.companyList.push(company);
+          this.setMaxPage();
         }
       } catch (error) {
         console.log(error.message);
       }
     },
+
+    setMaxPage() {
+      if (this.length % this.pagePerItemCount === 0) {
+        this.maxPage = this.length / this.pagePerItemCount;
+        console.log('test');
+        console.log(this.maxPage);
+        return;
+      }
+      this.maxPage = Math.floor(this.length / this.pagePerItemCount + 1);
+      console.log(this.maxPage);
+    },
   },
+
   async created() {
     console.log('create');
     await this.getCompanyList();
   },
+
   data() {
     return {
+      currentPage: 1,
+      length: 0,
+      maxPage: 0,
+      pagePerItemCount: 3,
+      totalVisible: 7,
       companyList: [],
     };
   },

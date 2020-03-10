@@ -103,15 +103,18 @@ export default {
       ],
     };
   },
+
   computed: {
     isLogin() {
       return this.$store.getters.isLogin;
     },
   },
+
   methods: {
     test() {
       console.log('test');
     },
+
     logoLink() {
       try {
         return this.$store.getters.isLogin
@@ -122,12 +125,14 @@ export default {
         console.log(e);
       }
     },
+
     logout() {
       this.$store.commit('clearToken');
       this.$store.commit('clearName');
       deleteCookie('user');
       deleteCookie('auth');
       deleteCookie('company');
+      deleteCookie('user_id');
       this.$router.push('/login');
     },
   },

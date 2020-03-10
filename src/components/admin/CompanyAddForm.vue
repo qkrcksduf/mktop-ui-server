@@ -107,10 +107,12 @@ export default {
     phoneNumberValid() {
       return validatePhoneNumber(this.phoneNumber);
     },
+
     userNameValid() {
       return validateEmail(this.username);
     },
   },
+
   methods: {
     cancel() {
       console.log('calcel');
@@ -137,6 +139,7 @@ export default {
         this.logMessage = error.response.data.message;
       }
     },
+
     async insertAccount() {
       const { data } = await insertAccount({
         authority: 'company',
@@ -148,6 +151,7 @@ export default {
       });
       this.id = data.id;
     },
+
     async insertCompany() {
       await insertCompany({
         accountId: this.id,

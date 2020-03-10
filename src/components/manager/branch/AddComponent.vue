@@ -104,6 +104,7 @@ export default {
       address: '',
     };
   },
+
   computed: {
     phoneNumberValid() {
       return validatePhoneNumber(this.phoneNumber);
@@ -113,6 +114,7 @@ export default {
       return validateEmail(this.username);
     },
   },
+
   methods: {
     cancel() {
       console.log('cancel');

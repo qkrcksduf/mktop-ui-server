@@ -38,34 +38,41 @@ const router = new VueRouter({
     {
       path: '/manager/main',
       component: () => import('@/views/manager/common/MainPage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/company',
       component: () => import('@/views/manager/company/UpdatePage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/branch',
       component: () => import('@/views/manager/branch/MainPage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/branch-add',
       component: () => import('@/views/manager/branch/AddPage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/branch-update/:id',
       component: () => import('@/views/manager/branch/UpdatePage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/account/info-update',
       component: () => import('@/views/manager/account/InfoPage'),
+      meta: { auth: true },
     },
     {
       path: '/manager/account/password-update',
       component: () => import('@/views/manager/account/PasswordPage'),
+      meta: { auth: true },
     },
     {
       path: '/test',
-      component: () => import('@/components/test/LayOuyTestComponent'),
+      component: () => import('@/components/test/PagingTestComponent'),
     },
     {
       path: '/*',

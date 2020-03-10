@@ -48,6 +48,7 @@ export default {
       return this.$store.getters.isLogin;
     },
   },
+
   methods: {
     logoLink() {
       try {
@@ -59,6 +60,7 @@ export default {
         console.log(e);
       }
     },
+
     logout() {
       this.$store.commit('clearName');
       this.$store.commit('clearToken');
@@ -66,10 +68,12 @@ export default {
       deleteCookie('auth');
       this.$router.push('/login');
     },
+
     test() {
       console.log('test');
     },
   },
+
   data: () => ({
     drawer: true,
     items: [

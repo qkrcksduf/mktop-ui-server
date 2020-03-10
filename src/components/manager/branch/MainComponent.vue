@@ -36,7 +36,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="item.code" v-for="item in branchList">
+                <tr :key="item.code" v-for="item in getCurrentPageList">
                   <td class="font-weight-bold">{{ item.no }}</td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.phoneNumber }}</td>
@@ -64,9 +64,10 @@
         <br /><br />
         <div class="text-center">
           <v-pagination
-            :length="5"
+            :length="maxPage"
             circle
-            v-model="branchList.no"
+            v-model="currentPage"
+            :total-visible="totalVisible"
           ></v-pagination>
         </div>
       </v-flex>
@@ -81,8 +82,14 @@ export default {
   data() {
     return {
       branchList: [],
+      currentPage: 1,
+      length: 0,
+      maxPage: 0,
+      pagePerItemCount: 3,
+      totalVisible: 7,
     };
   },
+
   async created() {
     try {
       await this.getBranchList();
@@ -91,10 +98,19 @@ export default {
     }
   },
 
+  computed: {
+    getCurrentPageList() {
+      const start = (this.currentPage - 1) * this.pagePerItemCount;
+      const end = start + this.pagePerItemCount;
+      return this.branchList.slice(start, end);
+    },
+  },
+
   methods: {
     async getBranchList() {
       const { data } = await selectBranchList();
       console.log(data);
+      this.length = data.length;
       console.log(data[0].manager.name);
       for (let i = 0; i < data.length; i++) {
         let branch = {
@@ -105,9 +121,19 @@ export default {
           address: data[i].address,
           manager: data[i].manager.name,
         };
+        this.setMaxPage();
         this.branchList.push(branch);
       }
     },
+
+    setMaxPage() {
+      if (this.length % this.pagePerItemCount === 0) {
+        this.maxPage = Math.floor(this.length / this.pagePerItemCount);
+        return;
+      }
+      this.maxPage = Math.floor(this.length / this.pagePerItemCount + 1);
+    },
+
     async deleteItem(id) {
       try {
         if (confirm('정말로 삭제하시겠습니까?')) {
@@ -115,9 +141,10 @@ export default {
           this.$router.go();
         }
       } catch (error) {
-        console.log(error);
+        alert(error.response.data.message);
       }
     },
+
     updateItem(id) {
       this.$router.push(`/manager/branch-update/${id}`);
     },

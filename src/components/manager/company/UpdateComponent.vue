@@ -99,6 +99,7 @@ export default {
     cancel() {
       this.$router.push('/manager/main');
     },
+
     async update() {
       try {
         await updateCompanyById({

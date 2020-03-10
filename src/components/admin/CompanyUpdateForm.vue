@@ -77,6 +77,7 @@ export default {
       console.log(error);
     }
   },
+
   data() {
     return {
       id: '',
@@ -86,11 +87,13 @@ export default {
       logMessage: '',
     };
   },
+
   computed: {
     phoneNumberValid() {
       return validatePhoneNumber(this.phoneNumber);
     },
   },
+
   methods: {
     async update() {
       try {
@@ -106,9 +109,11 @@ export default {
         this.logMessage = error;
       }
     },
+
     cancel() {
       this.$router.push('/admin/main');
     },
+
     click() {
       console.log('click');
     },

@@ -21,9 +21,11 @@
       <div>
         <v-btn :disabled="pageNum === 0" @click="prevPage">다음</v-btn>
         <span>{{ pageNum + 1 }}</span>
-        <v-btn :disabled="pageNum >= pageCount - 1" @click="nextPage"
-          >다음</v-btn
-        >
+        <v-pagination
+          v-model="pageNum"
+          :length="5"
+          next-icon="mdi-account"
+        ></v-pagination>
       </div>
     </v-simple-table>
   </div>

@@ -1,23 +1,23 @@
 import { companies } from './index';
 
 function selectCompanyList() {
-  return companies.get('/companies');
+  return companies.get('/');
 }
 
 function selectCompanyById(id) {
-  return companies.get(`/companies/${id}`);
+  return companies.get(`/${id}`);
 }
 
 function insertCompany(company) {
-  return companies.post('/companies', company);
+  return companies.post('/', company);
 }
 
 function updateCompanyById(company) {
-  return companies.put(`/companies/${company.id}`, company);
+  return companies.put(`/${company.id}`, company);
 }
 
 function deleteCompanyById(id) {
-  return companies.delete(`companies/${id}`);
+  return companies.delete(`/${id}`);
 }
 
 export {
