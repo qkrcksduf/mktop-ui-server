@@ -1,11 +1,10 @@
 <template>
   <v-container fill-height fluid style="background-color: #F2F3F4">
-    <v-layout justify-center>
+    <v-layout justify-center style="padding: 20px">
       <v-flex>
-        <br /><br /><br />
         <h2
           class="d-flex align-center justify-space-between"
-          style="padding-left: 10px"
+          style="padding-top: 30px"
         >
           지점 목록
 
@@ -37,7 +36,9 @@
               </thead>
               <tbody>
                 <tr :key="item.code" v-for="item in getCurrentPageList">
-                  <td class="font-weight-bold">{{ item.no }}</td>
+                  <td class="font-weight-bold">
+                    {{ item.no }}
+                  </td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.phoneNumber }}</td>
                   <td>{{ item.address }}</td>
@@ -79,16 +80,6 @@ import { selectBranchList, deleteBranchById } from '@/api/branch';
 
 export default {
   name: 'MainComponent',
-  data() {
-    return {
-      branchList: [],
-      currentPage: 1,
-      length: 0,
-      maxPage: 0,
-      pagePerItemCount: 3,
-      totalVisible: 7,
-    };
-  },
 
   async created() {
     try {
@@ -148,6 +139,17 @@ export default {
     updateItem(id) {
       this.$router.push(`/manager/branch-update/${id}`);
     },
+  },
+
+  data() {
+    return {
+      branchList: [],
+      currentPage: 1,
+      length: 0,
+      maxPage: 0,
+      pagePerItemCount: 20,
+      totalVisible: 7,
+    };
   },
 };
 </script>

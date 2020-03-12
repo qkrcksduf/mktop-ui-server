@@ -8,13 +8,9 @@ export default new Vuex.Store({
   state: {
     name: getUserFromCookie() || '',
     token: getAuthFromCookie() || '',
-    drawer: true,
     mainPage: false,
   },
   getters: {
-    getDrawer(state) {
-      return state.drawer;
-    },
     isLogin(state) {
       return state.name !== '';
     },
@@ -37,9 +33,6 @@ export default new Vuex.Store({
     },
     setName(state, name) {
       state.name = name;
-    },
-    setDrawer(state) {
-      state.drawer = !state.drawer;
     },
   },
 });

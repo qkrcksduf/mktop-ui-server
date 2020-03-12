@@ -11,6 +11,11 @@ import LayoutComponent from '@/components/manager/common/MainLayoutComponent';
 export default {
   name: 'MainPage',
   components: { LayoutComponent, MainComponent },
+  methods: {
+    parentReceive() {
+      console.log('receive');
+    },
+  },
 };
 </script>
 

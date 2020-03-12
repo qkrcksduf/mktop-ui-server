@@ -41,6 +41,11 @@ const router = new VueRouter({
       meta: { auth: true },
     },
     {
+      path: '/manager/main/:id',
+      component: () => import('@/views/manager/common/DevicePage'),
+      meta: { auth: true },
+    },
+    {
       path: '/manager/company',
       component: () => import('@/views/manager/company/UpdatePage'),
       meta: { auth: true },

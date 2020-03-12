@@ -1,13 +1,10 @@
 <template>
   <v-container fill-height fluid style="background-color: #F2F3F4">
-    <v-layout justify-center>
+    <v-layout justify-center style="padding: 30px">
       <v-flex>
-        <br />
-        <br />
-        <br />
         <h2
           class="d-flex align-center justify-space-between"
-          style="padding-left: 10px"
+          style="padding-top: 30px"
         >
           회사 목록
 
@@ -148,7 +145,7 @@ export default {
       currentPage: 1,
       length: 0,
       maxPage: 0,
-      pagePerItemCount: 3,
+      pagePerItemCount: 15,
       totalVisible: 7,
       companyList: [],
     };

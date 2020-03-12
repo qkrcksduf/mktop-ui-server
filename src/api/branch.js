@@ -1,5 +1,13 @@
 import { branches } from '@/api/index';
 
+function selectDevicesByBranch() {
+  return branches.get('/devices');
+}
+
+function selectDevicesByBranchId(id) {
+  return branches.get(`/${id}/devices`);
+}
+
 function selectBranchList() {
   return branches.get('/');
 }
@@ -26,4 +34,6 @@ export {
   selectBranchById,
   updateBranchById,
   deleteBranchById,
+  selectDevicesByBranchId,
+  selectDevicesByBranch,
 };

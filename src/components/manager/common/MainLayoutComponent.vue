@@ -70,7 +70,11 @@
           >
         </template>
         <v-list>
-          <v-list-item v-for="(item, i) in branchList" :key="i" @click="test">
+          <v-list-item
+            v-for="item in branchList"
+            :key="item.id"
+            @click="sendEvent(item.id, item.branchName)"
+          >
             <v-list-item-title> {{ item.branchName }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -82,6 +86,7 @@
 <script>
 import { deleteCookie } from '@/utils/cookies';
 import { selectBranchList } from '@/api/branch';
+import { eventBus } from '@/utils/eventBus';
 
 export default {
   name: 'LayoutComponent',
@@ -89,6 +94,7 @@ export default {
     const { data } = await selectBranchList();
     for (let i = 0; i < data.length; i++) {
       let branch = {
+        id: data[i].id,
         branchName: data[i].name,
       };
       this.branchList.push(branch);
@@ -97,6 +103,7 @@ export default {
 
   data() {
     return {
+      logMessage: '',
       branchList: [{ branchName: '모든 지점' }],
       active: true,
       drawer: 'true',
@@ -140,13 +147,20 @@ export default {
       console.log('test');
     },
 
+    sendEvent(branchId, branchName) {
+      let branch = {
+        id: branchId,
+        name: branchName,
+      };
+      eventBus.$emit('selectBranch', branch);
+    },
+
     logoLink() {
       try {
         return this.$store.getters.isLogin
           ? this.$router.push('/manager/main')
           : this.$router.push('/login');
       } catch (e) {
-        console.log('test');
         console.log(e);
       }
     },

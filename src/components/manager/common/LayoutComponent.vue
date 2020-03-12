@@ -121,7 +121,6 @@ export default {
           ? this.$router.push('/manager/main')
           : this.$router.push('/login');
       } catch (e) {
-        console.log('test');
         console.log(e);
       }
     },
