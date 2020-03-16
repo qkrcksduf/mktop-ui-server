@@ -41,12 +41,7 @@ const router = new VueRouter({
       meta: { auth: true },
     },
     {
-      path: '/manager/main/:id',
-      component: () => import('@/views/manager/common/DevicePage'),
-      meta: { auth: true },
-    },
-    {
-      path: '/manager/company',
+      path: '/manager/company-update',
       component: () => import('@/views/manager/company/UpdatePage'),
       meta: { auth: true },
     },
@@ -76,8 +71,12 @@ const router = new VueRouter({
       meta: { auth: true },
     },
     {
-      path: '/test',
-      component: () => import('@/components/test/PagingTestComponent'),
+      path: '/test1',
+      component: () => import('@/components/test/CardComponent'),
+    },
+    {
+      path: '/test2',
+      component: () => import('@/components/test/FlexComponent'),
     },
     {
       path: '/*',

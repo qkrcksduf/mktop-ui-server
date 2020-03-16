@@ -103,7 +103,7 @@ export default {
         {
           icon: 'mdi-domain',
           text: '회사 관리',
-          url: '/manager/company',
+          url: '/manager/company-update',
           tree: null,
         },
         {

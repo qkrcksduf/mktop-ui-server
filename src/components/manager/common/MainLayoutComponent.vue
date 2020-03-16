@@ -12,7 +12,7 @@
             메인 화면
           </v-list-item-title>
         </v-list-item>
-        <v-list-item to="/manager/company">
+        <v-list-item to="/manager/company-update">
           <v-list-item-action>
             <v-icon>
               mdi-domain
@@ -117,7 +117,7 @@ export default {
         {
           icon: 'mdi-domain',
           text: '회사 관리',
-          url: '/manager/company',
+          url: '/manager/company-update',
           tree: null,
         },
         {
