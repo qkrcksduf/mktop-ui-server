@@ -24,7 +24,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!userNameValid && username">
-                      Please enter an email address
+                      이메일 형식이 아닙니다.
                     </span>
                   </p>
                 </v-flex>
@@ -45,7 +45,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!phoneNumberValid && phoneNumber">
-                      Please enter an phoneNumber
+                      전화번호를 입력해 주세요.
                     </span>
                   </p>
                 </v-flex>
@@ -60,7 +60,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 :disabled="
                   !phoneNumber ||
@@ -73,7 +73,7 @@
                 text
                 color="primary"
                 @click="insert"
-                >Create</v-btn
+                >생성하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>
@@ -89,6 +89,7 @@ import { validatePhoneNumber } from '@/utils/validation';
 import { insertAccount } from '@/api/accunt';
 import { insertBranch } from '@/api/branch';
 import { validateEmail } from '@/utils/validation';
+import { getCompanyFromCookie } from '@/utils/cookies';
 
 export default {
   name: 'CompanyAddForm',
@@ -145,7 +146,7 @@ export default {
 
     async insertAccount() {
       const { data } = await insertAccount({
-        authority: 'branch',
+        role: 'manager',
         phoneNumber: '010-1234-1234',
         email: `${this.createText()}@text.com`,
         name: '홍길동',
@@ -159,8 +160,10 @@ export default {
     },
 
     async insertBranch() {
+      let companyId = getCompanyFromCookie();
       const { data } = await insertBranch({
-        accountId: this.id,
+        managerId: this.id,
+        companyId: companyId,
         name: this.branchName,
         phoneNumber: this.phoneNumber,
         address: this.address,

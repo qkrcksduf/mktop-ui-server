@@ -71,13 +71,33 @@ const router = new VueRouter({
       meta: { auth: true },
     },
     {
-      path: '/test1',
-      component: () => import('@/components/test/CardComponent'),
+      path: '/branch/main',
+      component: () => import('@/views/branch/MainPage'),
+      meta: { auth: true },
     },
     {
-      path: '/test2',
-      component: () => import('@/components/test/FlexComponent'),
+      path: '/branch/device',
+      component: () => import('@/views/branch/ListPage'),
+      meta: { auth: true },
     },
+    {
+      path: '/branch/device-add',
+      component: () => import('@/views/branch/AddPage'),
+      meta: { auth: true },
+    },
+    {
+      path: '/branch/device-update/:id',
+      component: () => import('@/views/branch/UpdatePage'),
+      meta: { auth: true },
+    },
+    // {
+    //   path: '/socket',
+    //   component: () => import('@/views/SocketTest'),
+    // },
+    // {
+    //   path: '/chat-room/:username',
+    //   component: () => import('@/views/ChatRoom'),
+    // },
     {
       path: '/*',
       component: () => import('@/views/error/NotFoundPage'),

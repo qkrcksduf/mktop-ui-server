@@ -25,7 +25,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!usernameValid && username">
-                      Please enter an email address
+                      이메일 형식이 아닙니다.
                     </span>
                   </p>
                 </v-flex>
@@ -37,7 +37,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!emailValid && email">
-                      Please enter an email address
+                      이메일 형식이 아닙니다.
                     </span>
                   </p>
                 </v-flex>
@@ -49,7 +49,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!phoneNumberValid && phoneNumber">
-                      Please enter an phoneNumber
+                      전화번호를 입력해 주세요.
                     </span>
                   </p>
                 </v-flex>
@@ -74,6 +74,7 @@
                 >Save</v-btn
               >
             </v-card-actions>
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -94,6 +95,7 @@ export default {
       username: '',
       email: '',
       phoneNumber: '',
+      logMessage: '',
     };
   },
 
@@ -101,10 +103,11 @@ export default {
     try {
       this.id = getUserIdFromCookie();
       const { data } = await selectAccountById(this.id);
-      this.name = data.account.name;
-      this.username = data.account.username;
-      this.email = data.account.email;
-      this.phoneNumber = data.account.phoneNumber;
+      console.log(data);
+      this.name = data.name;
+      this.username = data.username;
+      this.email = data.email;
+      this.phoneNumber = data.phoneNumber;
     } catch (error) {
       console.log(error);
     }
@@ -141,6 +144,7 @@ export default {
         console.log(data);
         this.$router.push('/manager/main');
       } catch (error) {
+        this.logMessage = error.response.data.message;
         console.log(error);
       }
     },

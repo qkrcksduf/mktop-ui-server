@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height fluid style="background-color: #F2F3F4">
-    <v-layout justify-center style="padding: 30px">
+    <v-layout justify-center style="padding: 40px">
       <v-flex>
         <h2
           class="d-flex align-center justify-space-between"
@@ -43,13 +43,14 @@
                   <td>{{ item.admin }}</td>
                   <td>
                     <v-icon
-                      @click="updateItem(item.uuid)"
+                      :disabled="!item.canUpdateInfoByRoot"
+                      @click="updateItem(item.id)"
                       color="indigo lighten-1"
                     >
                       mdi-pencil
                     </v-icon>
                     <v-icon
-                      @click="deleteItem(item.uuid)"
+                      @click="deleteItem(item.id)"
                       color="indigo lighten-1"
                     >
                       mdi-delete
@@ -104,16 +105,17 @@ export default {
     async getCompanyList() {
       try {
         const { data } = await selectCompanyList();
+        console.log(data);
         this.length = data.length;
-        console.log(this.length);
         for (let i = 0; i < data.length; i++) {
           let company = {
             no: i + 1,
-            uuid: data[i].id,
+            id: data[i].id,
             name: data[i].name,
             phoneNumber: data[i].phoneNumber,
             address: data[i].address,
-            admin: data[i].admin.name,
+            admin: data[i].adminName,
+            canUpdateInfoByRoot: data[i].canUpdateInfoByRoot,
           };
           this.companyList.push(company);
           this.setMaxPage();
@@ -126,12 +128,9 @@ export default {
     setMaxPage() {
       if (this.length % this.pagePerItemCount === 0) {
         this.maxPage = this.length / this.pagePerItemCount;
-        console.log('test');
-        console.log(this.maxPage);
         return;
       }
-      this.maxPage = Math.floor(this.length / this.pagePerItemCount + 1);
-      console.log(this.maxPage);
+      this.maxPage = Math.floor(this.length / this.pagePerItemCount) + 1;
     },
   },
 
@@ -142,10 +141,11 @@ export default {
 
   data() {
     return {
+      canUpdateInfoByRoot: true,
       currentPage: 1,
       length: 0,
       maxPage: 0,
-      pagePerItemCount: 15,
+      pagePerItemCount: 20,
       totalVisible: 7,
       companyList: [],
     };

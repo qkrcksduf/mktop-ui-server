@@ -156,6 +156,32 @@
                   </v-card-text>
                 </v-card>
 
+                <v-card class="mx-auto">
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="headline"
+                        >대전 봉명점 - 솥2</v-list-item-title
+                      >
+                      <v-list-item-subtitle>12:30 PM</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-card-text>
+                    <v-row align="center">
+                      <v-col class="display-3" cols="8">
+                        240&deg;C
+                      </v-col>
+                      <v-col cols="4">
+                        <v-img
+                          src="../../assets/red.png"
+                          style="background-color: gray"
+                          alt="Sunny image"
+                          width="92"
+                        ></v-img>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+
                 <v-card max-width="344" class="mx-auto">
                   <v-list-item>
                     <v-list-item-avatar color="dark blue"></v-list-item-avatar>

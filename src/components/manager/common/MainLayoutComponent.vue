@@ -152,7 +152,7 @@ export default {
         id: branchId,
         name: branchName,
       };
-      eventBus.$emit('selectBranch', branch);
+      eventBus.$emit('selectDevice', branch);
     },
 
     logoLink() {

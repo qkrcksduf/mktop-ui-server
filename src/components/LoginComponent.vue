@@ -19,7 +19,7 @@
                 ></v-text-field>
                 <p class="validation-text">
                   <span class="warn" v-if="!emailValid && email">
-                    Please enter an email address
+                    이메일 형식이 아닙니다.
                   </span>
                 </p>
                 <v-text-field
@@ -28,8 +28,11 @@
                   label="Password"
                   name="password"
                   prepend-icon="mdi-lock"
-                  type="password"
-                ></v-text-field>
+                  :type="show ? 'text' : 'password'"
+                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="show = !show"
+                >
+                </v-text-field>
               </v-card-text>
               <p class="log">{{ logMessage }}</p>
               <v-card-actions>
@@ -59,6 +62,7 @@ import {
   saveUserToCookie,
   saveCompanyToCookie,
   saveUserIdToCookie,
+  saveBranchToCookie,
 } from '@/utils/cookies';
 
 export default {
@@ -68,6 +72,7 @@ export default {
       email: '',
       password: '',
       logMessage: '',
+      show: true,
     };
   },
   computed: {
@@ -84,18 +89,20 @@ export default {
         };
         const { data } = await loginUser(userData);
         console.log(data);
-        console.log(data.name);
-        this.$store.commit('setName', data.name);
+        this.$store.commit('setName', data.account.name);
         this.$store.commit('setToken', data.token);
-        saveUserToCookie(data.name);
+        saveUserToCookie(data.account.name);
         saveAuthCookie(data.token);
-        if (data.authority === 'mktop_admin') {
+        if (data.account.role === 'root') {
           this.$router.push('/admin/main');
-        } else if (data.authority === 'company_admin') {
+        } else if (data.account.role === 'admin') {
+          console.log(data.companyId);
           saveCompanyToCookie(data.companyId);
-          console.log('accountId:' + data.id);
-          saveUserIdToCookie(data.id);
+          saveUserIdToCookie(data.account.id);
           this.$router.push('/manager/main');
+        } else if (data.account.role === 'manager') {
+          saveBranchToCookie(data.branchId);
+          this.$router.push('/branch/main');
         }
       } catch (error) {
         this.logMessage = error.response.data.message;

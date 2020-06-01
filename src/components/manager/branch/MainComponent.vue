@@ -102,7 +102,7 @@ export default {
       const { data } = await selectBranchList();
       console.log(data);
       this.length = data.length;
-      console.log(data[0].manager.name);
+
       for (let i = 0; i < data.length; i++) {
         let branch = {
           id: data[i].id,
@@ -110,7 +110,7 @@ export default {
           name: data[i].name,
           phoneNumber: data[i].phoneNumber,
           address: data[i].address,
-          manager: data[i].manager.name,
+          manager: data[i].managerName,
         };
         this.setMaxPage();
         this.branchList.push(branch);

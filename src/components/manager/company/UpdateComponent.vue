@@ -25,7 +25,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!phoneNumberValid && phoneNumber">
-                      Please enter an phoneNumber
+                      전화번호를 입력해 주세요.
                     </span>
                   </p>
                 </v-flex>
@@ -37,11 +37,18 @@
                   >
                   </v-text-field>
                 </v-flex>
+                <v-flex xs12>
+                  <v-checkbox
+                    v-model="canUpdateInfoByRoot"
+                    style="color: red"
+                    label="고객사 정보 변경에 대한 권한 부여"
+                  ></v-checkbox>
+                </v-flex>
               </v-layout>
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 :disabled="
                   !phoneNumber || !address || !name || !phoneNumberValid
@@ -49,7 +56,7 @@
                 text
                 color="primary"
                 @click="update"
-                >Save</v-btn
+                >변경하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>
@@ -69,6 +76,7 @@ export default {
   name: 'CompanyComponent',
   data() {
     return {
+      canUpdateInfoByRoot: true,
       logMessage: '',
       companyId: '',
       name: '',
@@ -81,9 +89,11 @@ export default {
     try {
       this.id = getCompanyFromCookie();
       const { data } = await selectCompanyById(this.id);
+      console.log(data);
       this.name = data.name;
       this.phoneNumber = data.phoneNumber;
       this.address = data.address;
+      this.canUpdateInfoByRoot = data.canUpdateInfoByRoot;
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +117,7 @@ export default {
           name: this.name,
           phoneNumber: this.phoneNumber,
           address: this.address,
+          canUpdateInfoByRoot: this.canUpdateInfoByRoot,
         });
         this.$router.push('/manager/main');
       } catch (error) {

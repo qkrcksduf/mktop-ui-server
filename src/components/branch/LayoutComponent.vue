@@ -32,11 +32,22 @@
     </v-app-bar>
   </div>
 </template>
+
 <script>
 import { deleteCookie } from '@/utils/cookies';
 
 export default {
-  name: 'TestComponent',
+  name: 'LayoutComponent',
+  data() {
+    return {
+      drawer: true,
+      items: [
+        { icon: 'mdi-home', text: '메인 화면', url: '/branch/main' },
+        { icon: 'mdi-plus', text: '장치 관리', url: '/branch/device' },
+      ],
+    };
+  },
+
   computed: {
     isLogin() {
       return this.$store.getters.isLogin;
@@ -47,7 +58,7 @@ export default {
     logoLink() {
       try {
         this.$store.getters.isLogin
-          ? this.$router.push('/admin/main')
+          ? this.$router.push('/branch/main')
           : this.$router.push('/login');
       } catch (e) {
         console.log('test');
@@ -60,6 +71,7 @@ export default {
       this.$store.commit('clearToken');
       deleteCookie('user');
       deleteCookie('auth');
+      deleteCookie('branch');
       this.$router.push('/login');
     },
 
@@ -67,14 +79,6 @@ export default {
       console.log('test');
     },
   },
-
-  data: () => ({
-    drawer: true,
-    items: [
-      { icon: 'mdi-home', text: '메인 화면', url: '/admin/main' },
-      { icon: 'mdi-plus', text: '회사 추가', url: '/admin/company-add' },
-    ],
-  }),
 };
 </script>
 

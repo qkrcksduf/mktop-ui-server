@@ -25,7 +25,7 @@
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!phoneNumberValid && phoneNumber">
-                      Please enter an phoneNumber
+                      전화번호를 입력해 주세요.
                     </span>
                   </p>
                 </v-flex>
@@ -41,7 +41,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 :disabled="
                   !companyName || !phoneNumber || !address || !phoneNumberValid
@@ -49,7 +49,7 @@
                 text
                 color="primary"
                 @click="update"
-                >Save</v-btn
+                >변경하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>

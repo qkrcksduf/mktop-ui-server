@@ -9,11 +9,11 @@ function insertAccount(account) {
 }
 
 function updateInfoById(account) {
-  return accounts.put('/', account);
+  return accounts.put(`/${account.id}`, account);
 }
 
 function updatePassword(account) {
-  return accounts.put('/password', account);
+  return accounts.put(`/${account.id}/password`, account);
 }
 
 export { selectAccountById, insertAccount, updateInfoById, updatePassword };
