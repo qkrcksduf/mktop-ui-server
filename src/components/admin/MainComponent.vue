@@ -1,13 +1,10 @@
 <template>
   <v-container fill-height fluid style="background-color: #F2F3F4">
-    <v-layout justify-center>
+    <v-layout justify-center style="padding: 40px">
       <v-flex>
-        <br />
-        <br />
-        <br />
         <h2
           class="d-flex align-center justify-space-between"
-          style="padding-left: 10px"
+          style="padding-top: 30px"
         >
           회사 목록
 
@@ -38,7 +35,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="item.uuid" v-for="item in companyList">
+                <tr :key="i" v-for="(item, i) in getCurrentPageList">
                   <td class="font-weight-bold">{{ item.no }}</td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.phoneNumber }}</td>
@@ -46,13 +43,14 @@
                   <td>{{ item.admin }}</td>
                   <td>
                     <v-icon
-                      @click="updateItem(item.uuid)"
+                      :disabled="!item.canUpdateInfoByRoot"
+                      @click="updateItem(item.id)"
                       color="indigo lighten-1"
                     >
                       mdi-pencil
                     </v-icon>
                     <v-icon
-                      @click="deleteItem(item.uuid)"
+                      @click="deleteItem(item.id)"
                       color="indigo lighten-1"
                     >
                       mdi-delete
@@ -66,9 +64,9 @@
         <br /><br />
         <div class="text-center">
           <v-pagination
-            :length="5"
-            circle
-            v-model="companyList.no"
+            v-model="currentPage"
+            :length="maxPage"
+            :total-visible="totalVisible"
           ></v-pagination>
         </div>
       </v-flex>
@@ -77,22 +75,30 @@
 </template>
 
 <script>
-import { selectCompanyList, deleteCompany } from '@/api/company';
+import { selectCompanyList, deleteCompanyById } from '@/api/company';
 export default {
   name: 'MainComponent',
+  computed: {
+    getCurrentPageList() {
+      const start = (this.currentPage - 1) * this.pagePerItemCount;
+      const end = start + this.pagePerItemCount;
+      return this.companyList.slice(start, end);
+    },
+  },
+
   methods: {
     async deleteItem(id) {
       try {
         if (confirm('정말로 삭제하시겠습니까?')) {
-          await deleteCompany(id);
+          await deleteCompanyById(id);
           this.$router.go();
-          // this.companyList = '';
-          // await this.getCompanyList();
         }
       } catch (error) {
-        console.log(error);
+        alert(error.response.data.message);
+        console.log(error.response.data.message);
       }
     },
+
     updateItem(id) {
       this.$router.push(`/admin/company-update/${id}`);
     },
@@ -100,29 +106,47 @@ export default {
       try {
         const { data } = await selectCompanyList();
         console.log(data);
-
+        this.length = data.length;
         for (let i = 0; i < data.length; i++) {
           let company = {
             no: i + 1,
-            uuid: data[i].id,
+            id: data[i].id,
             name: data[i].name,
             phoneNumber: data[i].phoneNumber,
             address: data[i].address,
-            admin: data[i].admin.name,
+            admin: data[i].adminName,
+            canUpdateInfoByRoot: data[i].canUpdateInfoByRoot,
           };
           this.companyList.push(company);
+          this.setMaxPage();
         }
       } catch (error) {
-        console.log(error.data.response.message);
+        console.log(error.message);
       }
     },
+
+    setMaxPage() {
+      if (this.length % this.pagePerItemCount === 0) {
+        this.maxPage = this.length / this.pagePerItemCount;
+        return;
+      }
+      this.maxPage = Math.floor(this.length / this.pagePerItemCount) + 1;
+    },
   },
+
   async created() {
     console.log('create');
     await this.getCompanyList();
   },
+
   data() {
     return {
+      canUpdateInfoByRoot: true,
+      currentPage: 1,
+      length: 0,
+      maxPage: 0,
+      pagePerItemCount: 20,
+      totalVisible: 7,
       companyList: [],
     };
   },

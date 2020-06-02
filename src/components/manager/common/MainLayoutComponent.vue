@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <div>
     <v-navigation-drawer dark v-model="drawer" :clipped="true" app>
       <v-list dense>
         <v-list-item to="/manager/main">
@@ -12,7 +12,7 @@
             메인 화면
           </v-list-item-title>
         </v-list-item>
-        <v-list-item to="/manager/company">
+        <v-list-item to="/manager/company-update">
           <v-list-item-action>
             <v-icon>
               mdi-domain
@@ -56,41 +56,55 @@
         <v-btn style="font-size: 20px" @click="logoLink">MKTOP</v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-
-      <v-menu style="padding-right: 30px" transition="scale-transaction">
-        <template v-slot:activator="{ on }">
-          <v-btn color="gray" dark v-on="on">Select Branch</v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(item, i) in list" :key="i" @click="test">
-            <v-list-item-title> {{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <span v-if="isLogin" style="padding-left: 10px">
+      <span v-if="isLogin">
         <h3>{{ $store.state.name }}님</h3>
       </span>
       <h3 v-if="isLogin">
         <v-btn @click="logout"> <h3>로그아웃</h3></v-btn>
       </h3>
+      <v-menu transition="scale-transaction" bottom right>
+        <template v-slot:activator="{ on }">
+          <v-btn color="grey" dark v-on="on"
+            ><h3>지점 선택</h3>
+            <v-icon>mdi-menu-down</v-icon></v-btn
+          >
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="item in branchList"
+            :key="item.id"
+            @click="sendEvent(item.id, item.branchName)"
+          >
+            <v-list-item-title> {{ item.branchName }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
-  </v-app>
+  </div>
 </template>
 
 <script>
 import { deleteCookie } from '@/utils/cookies';
+import { selectBranchList } from '@/api/branch';
+import { eventBus } from '@/utils/eventBus';
 
 export default {
   name: 'LayoutComponent',
+  async created() {
+    const { data } = await selectBranchList();
+    for (let i = 0; i < data.length; i++) {
+      let branch = {
+        id: data[i].id,
+        branchName: data[i].name,
+      };
+      this.branchList.push(branch);
+    }
+  },
+
   data() {
     return {
-      list: [
-        { title: '지점 1' },
-        { title: '지점 2' },
-        { title: '지점 3' },
-        { title: '지점 4' },
-        { title: '지점 5' },
-      ],
+      logMessage: '',
+      branchList: [{ branchName: '모든 지점' }],
       active: true,
       drawer: 'true',
       items: [
@@ -121,6 +135,7 @@ export default {
       ],
     };
   },
+
   computed: {
     isLogin() {
       return this.$store.getters.isLogin;
@@ -132,13 +147,20 @@ export default {
       console.log('test');
     },
 
+    sendEvent(branchId, branchName) {
+      let branch = {
+        id: branchId,
+        name: branchName,
+      };
+      eventBus.$emit('selectDevice', branch);
+    },
+
     logoLink() {
       try {
         return this.$store.getters.isLogin
           ? this.$router.push('/manager/main')
           : this.$router.push('/login');
       } catch (e) {
-        console.log('test');
         console.log(e);
       }
     },
@@ -149,6 +171,7 @@ export default {
       deleteCookie('user');
       deleteCookie('auth');
       deleteCookie('company');
+      deleteCookie('user_id');
       this.$router.push('/login');
     },
   },

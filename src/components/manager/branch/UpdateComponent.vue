@@ -11,15 +11,7 @@
               <v-layout row wrap>
                 <v-flex xs12>
                   <v-text-field
-                    value="홍길동"
-                    prepend-icon="mdi-account"
-                    placeholder="이름"
-                  >
-                  </v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field
-                    value="지점1"
+                    v-model="branchName"
                     prepend-icon="mdi-domain"
                     placeholder="지점 이름"
                   >
@@ -27,15 +19,20 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
+                    v-model="phoneNumber"
                     prepend-icon="mdi-phone"
-                    value="010-1234-5678"
                     placeholder="010-0000-0000"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!phoneNumberValid && phoneNumber">
+                      전화번호를 입력해 주세요.
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
+                    v-model="address"
                     prepend-icon="mdi-note"
-                    value="유성구 덕명동"
                     placeholder="주소"
                   >
                   </v-text-field>
@@ -44,9 +41,18 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="save">Save</v-btn>
+              <v-btn text @click="cancel">취소하</v-btn>
+              <v-btn
+                text
+                :disabled="
+                  !phoneNumber || !address || !branchName || !phoneNumberValid
+                "
+                color="primary"
+                @click="update"
+                >변경하기</v-btn
+              >
             </v-card-actions>
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -55,15 +61,63 @@
 </template>
 
 <script>
+import { selectBranchById, updateBranchById } from '@/api/branch';
+import { validatePhoneNumber } from '@/utils/validation';
+
 export default {
   name: 'CompanyUpdateForm',
+  async created() {
+    try {
+      this.id = this.$route.params.id;
+      await this.getBranch();
+    } catch (error) {
+      this.logMessage = error.response.data.message;
+    }
+  },
+
+  data() {
+    return {
+      id: '',
+      address: '',
+      phoneNumber: '',
+      branchName: '',
+      logMessage: '',
+    };
+  },
+
+  computed: {
+    phoneNumberValid() {
+      return validatePhoneNumber(this.phoneNumber);
+    },
+  },
+
   methods: {
+    async getBranch() {
+      const { data } = await selectBranchById(this.id);
+      console.log(data);
+      this.address = data.address;
+      this.phoneNumber = data.phoneNumber;
+      this.branchName = data.name;
+    },
+
+    async update() {
+      try {
+        await updateBranchById({
+          id: this.id,
+          name: this.branchName,
+          phoneNumber: this.phoneNumber,
+          address: this.address,
+        });
+        this.$router.push('/manager/branch');
+      } catch (error) {
+        this.logMessage = error.response.data.message;
+      }
+    },
+
     cancel() {
       this.$router.push('/manager/branch');
     },
-    save() {
-      console.log('save');
-    },
+
     click() {
       console.log('click');
     },

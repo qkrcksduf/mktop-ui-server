@@ -1,38 +1,29 @@
 import { companies } from './index';
 
-function selectCompanyByAccountId() {
-  return companies.get(`/account/${id}/company`);
-}
-
 function selectCompanyList() {
-  return companies.get('/companies');
+  return companies.get('/');
 }
 
-function selectCompany(id) {
-  return companies.get(`/companies/${id}`);
+function selectCompanyById(id) {
+  return companies.get(`/${id}`);
 }
 
 function insertCompany(company) {
-  return companies.post('/companies', company);
+  return companies.post('/', company);
 }
 
-function insertAccount(account) {
-  return companies.post('/accounts', account);
+function updateCompanyById(company) {
+  return companies.put(`/${company.id}`, company);
 }
 
-function updateCompany(company) {
-  return companies.put(`/companies/${company.id}`, company);
-}
-
-function deleteCompany(id) {
-  return companies.delete(`companies/${id}`);
+function deleteCompanyById(id) {
+  return companies.delete(`/${id}`);
 }
 
 export {
   selectCompanyList,
   insertCompany,
-  insertAccount,
-  updateCompany,
-  selectCompany,
-  deleteCompany,
+  updateCompanyById,
+  selectCompanyById,
+  deleteCompanyById,
 };

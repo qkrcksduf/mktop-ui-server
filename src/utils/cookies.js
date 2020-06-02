@@ -6,8 +6,23 @@ function saveUserToCookie(value) {
   document.cookie = `user=${value}`;
 }
 
+function saveUserIdToCookie(value) {
+  document.cookie = `user_id=${value}`;
+}
+
 function saveCompanyToCookie(value) {
   document.cookie = `company=${value}`;
+}
+
+function saveBranchToCookie(value) {
+  document.cookie = `branch=${value}`;
+}
+
+function getUserIdFromCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)user_id\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  );
 }
 
 function getAuthFromCookie() {
@@ -20,6 +35,13 @@ function getAuthFromCookie() {
 function getCompanyFromCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)company\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  );
+}
+
+function getBranchFromCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)branch\s*=\s*([^;]*).*$)|^.*$/,
     '$1',
   );
 }
@@ -39,8 +61,12 @@ export {
   saveCompanyToCookie,
   saveAuthCookie,
   saveUserToCookie,
+  saveUserIdToCookie,
+  saveBranchToCookie,
   getUserFromCookie,
   getAuthFromCookie,
+  getUserIdFromCookie,
   getCompanyFromCookie,
+  getBranchFromCookie,
   deleteCookie,
 };

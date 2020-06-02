@@ -23,6 +23,11 @@
                     prepend-icon="mdi-phone"
                     placeholder="010-0000-0000"
                   ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="!phoneNumberValid && phoneNumber">
+                      전화번호를 입력해 주세요.
+                    </span>
+                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
@@ -36,10 +41,18 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
-              <v-btn text color="primary" @click="update">Save</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
+              <v-btn
+                :disabled="
+                  !companyName || !phoneNumber || !address || !phoneNumberValid
+                "
+                text
+                color="primary"
+                @click="update"
+                >변경하기</v-btn
+              >
             </v-card-actions>
-            {{ logMessage }}
+            <p class="log">{{ logMessage }}</p>
           </v-card>
         </v-flex>
       </v-layout>
@@ -48,14 +61,15 @@
 </template>
 
 <script>
-import { updateCompany, selectCompany } from '@/api/company';
+import { updateCompanyById, selectCompanyById } from '@/api/company';
+import { validatePhoneNumber } from '@/utils/validation';
 
 export default {
   name: 'CompanyUpdateForm',
   async created() {
     try {
       this.id = this.$route.params.id;
-      const { data } = await selectCompany(this.id);
+      const { data } = await selectCompanyById(this.id);
       this.phoneNumber = data.phoneNumber;
       this.address = data.address;
       this.companyName = data.name;
@@ -63,6 +77,7 @@ export default {
       console.log(error);
     }
   },
+
   data() {
     return {
       id: '',
@@ -72,10 +87,17 @@ export default {
       logMessage: '',
     };
   },
+
+  computed: {
+    phoneNumberValid() {
+      return validatePhoneNumber(this.phoneNumber);
+    },
+  },
+
   methods: {
     async update() {
       try {
-        await updateCompany({
+        await updateCompanyById({
           id: this.id,
           name: this.companyName,
           address: this.address,
@@ -87,9 +109,11 @@ export default {
         this.logMessage = error;
       }
     },
+
     cancel() {
       this.$router.push('/admin/main');
     },
+
     click() {
       console.log('click');
     },

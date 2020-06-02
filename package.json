@@ -5,12 +5,19 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "mqtt": "vue-cli-service serve && ",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "express": "^4.17.1",
+    "mqtt": "^4.0.1",
+    "mqtt-router": "^0.5.0",
+    "pino": "^6.2.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
     "vuetify": "^2.2.11",

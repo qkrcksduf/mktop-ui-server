@@ -12,7 +12,7 @@
             메인 화면
           </v-list-item-title>
         </v-list-item>
-        <v-list-item to="/manager/company">
+        <v-list-item to="/manager/company-update">
           <v-list-item-action>
             <v-icon>
               mdi-domain
@@ -52,11 +52,9 @@
 
     <v-app-bar :clipped-left="true" app dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!--      <router-link>-->
       <v-toolbar-title style="color: white">
         <v-btn style="font-size: 20px" @click="logoLink">MKTOP</v-btn>
       </v-toolbar-title>
-      <!--      </router-link>-->
       <v-spacer></v-spacer>
       <span v-if="isLogin">
         <h3>{{ $store.state.name }}님</h3>
@@ -87,7 +85,7 @@ export default {
         {
           icon: 'mdi-domain',
           text: '회사 관리',
-          url: '/manager/company',
+          url: '/manager/company-update',
           tree: null,
         },
         {
@@ -105,28 +103,35 @@ export default {
       ],
     };
   },
+
   computed: {
     isLogin() {
       return this.$store.getters.isLogin;
     },
   },
+
   methods: {
+    test() {
+      console.log('test');
+    },
+
     logoLink() {
       try {
         return this.$store.getters.isLogin
           ? this.$router.push('/manager/main')
           : this.$router.push('/login');
       } catch (e) {
-        console.log('test');
         console.log(e);
       }
     },
+
     logout() {
       this.$store.commit('clearToken');
       this.$store.commit('clearName');
       deleteCookie('user');
       deleteCookie('auth');
       deleteCookie('company');
+      deleteCookie('user_id');
       this.$router.push('/login');
     },
   },
