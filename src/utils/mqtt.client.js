@@ -3,10 +3,12 @@ import { eventBus } from './eventBus';
 const mqtt = require('mqtt');
 
 async function initMqttClient() {
-  const client = await mqtt.connect({
-    port: 3002,
-    host: 'mktop-broker.wisoft.io',
-  });
+  // const client = await mqtt.connect({
+  //   // port: 3002,
+  //   'wss://mktop-broker.wisoft.io'
+  // });
+  var client = mqtt.connect('wss://mktop-broker.wisoft.io');
+
   const mqttRouter = require('mqtt-router').wrap(client);
 
   client.on('connect', () => {
