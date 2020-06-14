@@ -15,8 +15,8 @@ async function initMqttClient() {
     console.log('connect success');
     log.info('info');
   });
-
-  mqttRouter.subscribe('/v1/device', { qos: 2 }, (topic, message, param) => {
+  mqttRouter.subscribe(`/v1/device/${id}`, { qos: 2 }, (topic, message) => {
+    console.log(id);
     log.info('info_sub');
     console.log('[subscribe] /v1/device');
     console.log(JSON.parse(message));
