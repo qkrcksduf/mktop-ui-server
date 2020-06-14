@@ -1,6 +1,5 @@
 import { log } from './logger';
 import { eventBus } from './eventBus';
-import {accounts} from "@/api";
 const mqtt = require('mqtt');
 
 async function initMqttClient() {
