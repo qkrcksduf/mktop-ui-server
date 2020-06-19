@@ -140,6 +140,7 @@
 import { selectDevices, selectDeviceById, lock } from '@/api/device';
 import { eventBus } from '@/utils/eventBus';
 import { getBranchFromCookie } from '@/utils/cookies';
+import { initMqttClient } from '@/utils/mqtt.client';
 
 export default {
   name: 'MainComponent',
@@ -155,19 +156,19 @@ export default {
   },
 
   async created() {
-    eventBus.$on('test', body => {
+    eventBus.$on('update', body => {
       let data = getBranchFromCookie();
       if (data) {
-        console.log(data);
         console.log('eventBus');
-        console.log('branch_id: ' + data);
-        console.log('body' + body);
+        console.log('body');
+        console.log(body);
         this.getDevices();
       }
     });
     try {
-      console.log(this);
       await this.getDevices();
+      console.log(this.deviceList);
+      initMqttClient(this.deviceList);
     } catch (error) {
       console.log(error);
       this.logMessage = error.response.data.message;
@@ -187,6 +188,7 @@ export default {
         d.getHours() + '시 ' + d.getMinutes() + '분 ' + d.getSeconds() + '초';
       const { data } = await selectDevices();
       console.log(data);
+      this.deviceList = [];
       for (let i = 0; i < data.length; i++) {
         let device = {
           no: i + 1,
@@ -195,7 +197,6 @@ export default {
           temperature: data[i].temperature,
           sensingTime: currentTime,
         };
-        this.deviceList = [];
         this.deviceList.push(device);
       }
       console.log(this);
