@@ -53,6 +53,7 @@
 import { selectDevices } from '@/api/device';
 import { eventBus } from '@/utils/eventBus';
 import { selectDevicesByBranchId } from '@/api/branch';
+import { initMqttClient } from '@/utils/mqtt.client';
 import { getCompanyFromCookie } from '@/utils/cookies';
 
 export default {
@@ -68,25 +69,42 @@ export default {
     };
   },
 
-  // computed: {
-  //   getDeviceList() {
-  //     return this.deviceList;
-  //   },
-  // },
   async created() {
-    eventBus.$on('test', body => {
+    eventBus.$on('update', body => {
       let data = getCompanyFromCookie();
+      let d = new Date();
       if (data) {
         console.log('sub');
         console.log(body);
-        this.deviceList = [];
-        if (this.flag) this.getDeviceAndBranchList();
-        else this.getDevices();
-        console.log('1');
+        console.log(body.id);
+        console.log(body.temperature);
+        // console.log(topic);
+        // console.log(topic);
+        // this.deviceList = [];
+
+        for (let i = 0; i < this.deviceList.length; i++) {
+          if (body.id === this.deviceList[i].id) {
+            this.deviceList[i].temperature = body.temperature;
+          }
+
+          this.deviceList[i].sensingTime =
+            d.getHours() +
+            '시 ' +
+            d.getMinutes() +
+            '분 ' +
+            d.getSeconds() +
+            '초';
+        }
+
         return;
+
+        // this.getDeviceAndBranchList();
+        // else this.getDevices();
+        // console.log('1');
+        // return;
       }
 
-      // this.getDeviceAndBranchList();
+      this.getDeviceAndBranchList();
     });
     eventBus.$on('selectDevice', branch => {
       console.log('2');
@@ -96,17 +114,22 @@ export default {
       this.id = branch.id;
       this.branchName = branch.name;
       if (branch.id === undefined) {
-        this.flag = true;
+        this.flag = true; //회사에 속한 모든 디바이스 조회 하는 경우
         this.deviceList = [];
         this.getDeviceAndBranchList();
         return;
       }
-      this.flag = false;
+      this.flag = false; // 지점에 속한 디바이스 조회하는 경우
       this.getDevices();
     });
+
     try {
       console.log('3');
       await this.getDeviceAndBranchList();
+      console.log('deviceList: ');
+      console.log(this.deviceList);
+      console.log(this.deviceList[0].deviceId);
+      initMqttClient(this.deviceList);
     } catch (error) {
       console.log(error);
       this.logMessage = error.response.data.message;
@@ -126,6 +149,7 @@ export default {
         d.getHours() + '시 ' + d.getMinutes() + '분 ' + d.getSeconds() + '초';
       this.deviceList = [];
       const { data } = await selectDevicesByBranchId(this.id);
+      console.log('device: ');
       console.log(data);
       for (let i = 0; i < data.length; i++) {
         let device = {
@@ -144,10 +168,13 @@ export default {
       let currentTime =
         d.getHours() + '시 ' + d.getMinutes() + '분 ' + d.getSeconds() + '초';
       const { data } = await selectDevices();
+      console.log('test');
       console.log(data);
       for (let i = 0; i < data.length; i++) {
         let device = {
           no: i + 1,
+          branchId: data[i].branchId,
+          deviceId: data[i].id,
           branchName: data[i].branchName,
           deviceName: data[i].name,
           temperature: data[i].temperature,

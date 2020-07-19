@@ -68,6 +68,7 @@
 
 <script>
 import { deleteCookie } from '@/utils/cookies';
+import { end } from '@/utils/mqtt.client';
 
 export default {
   name: 'LayoutComponent',
@@ -133,6 +134,7 @@ export default {
       deleteCookie('company');
       deleteCookie('user_id');
       this.$router.push('/login');
+      end();
     },
   },
 };

@@ -17,11 +17,11 @@
                   prepend-icon="mdi-account"
                   type="text"
                 ></v-text-field>
-                <p class="validation-text">
-                  <span class="warn" v-if="!emailValid && email">
-                    이메일 형식이 아닙니다.
-                  </span>
-                </p>
+                <!--                <p class="validation-text">-->
+                <!--                  <span class="warn" v-if="!emailValid && email">-->
+                <!--                    이메일 형식이 아닙니다.-->
+                <!--                  </span>-->
+                <!--                </p>-->
                 <v-text-field
                   id="password"
                   v-model="password"
@@ -38,7 +38,7 @@
               <v-card-actions>
                 <v-spacer> </v-spacer>
                 <v-btn
-                  :disabled="!emailValid || !password"
+                  :disabled="!password"
                   color="deep-purple accent-4"
                   white
                   type="submit"

@@ -35,6 +35,7 @@
 
 <script>
 import { deleteCookie } from '@/utils/cookies';
+import { end } from '@/utils/mqtt.client';
 
 export default {
   name: 'LayoutComponent',
@@ -67,6 +68,7 @@ export default {
     },
 
     logout() {
+      end();
       this.$store.commit('clearName');
       this.$store.commit('clearToken');
       deleteCookie('user');

@@ -87,6 +87,7 @@
 import { deleteCookie } from '@/utils/cookies';
 import { selectBranchList } from '@/api/branch';
 import { eventBus } from '@/utils/eventBus';
+import { end } from '@/utils/mqtt.client';
 
 export default {
   name: 'LayoutComponent',
@@ -166,6 +167,7 @@ export default {
     },
 
     logout() {
+      end();
       this.$store.commit('clearToken');
       this.$store.commit('clearName');
       deleteCookie('user');
