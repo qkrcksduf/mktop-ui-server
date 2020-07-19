@@ -10,25 +10,20 @@
             <v-form @submit.prevent="submitForm">
               <v-card-text>
                 <v-text-field
-                  id="email"
-                  v-model="email"
-                  label="Email"
-                  name="email"
+                  id="username"
+                  v-model="username"
+                  label="아이디"
+                  name="username"
                   prepend-icon="mdi-account"
                   type="text"
                 ></v-text-field>
-                <!--                <p class="validation-text">-->
-                <!--                  <span class="warn" v-if="!emailValid && email">-->
-                <!--                    이메일 형식이 아닙니다.-->
-                <!--                  </span>-->
-                <!--                </p>-->
                 <v-text-field
                   id="password"
                   v-model="password"
-                  label="Password"
+                  label="비밀번호"
                   name="password"
                   prepend-icon="mdi-lock"
-                  :type="show ? 'text' : 'password'"
+                  :type="show ? 'password' : 'text'"
                   :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                   @click:append="show = !show"
                 >
@@ -56,7 +51,6 @@
 
 <script>
 import { loginUser } from '@/api/auth';
-import { validateEmail } from '@/utils/validation';
 import {
   saveAuthCookie,
   saveUserToCookie,
@@ -69,40 +63,36 @@ export default {
   name: 'LoginPage',
   data() {
     return {
-      email: '',
+      username: '',
       password: '',
       logMessage: '',
       show: true,
     };
   },
-  computed: {
-    emailValid() {
-      return validateEmail(this.email);
-    },
-  },
   methods: {
     async submitForm() {
       try {
         const userData = {
-          username: this.email,
+          username: this.username,
           password: this.password,
         };
         const { data } = await loginUser(userData);
         console.log(data);
+        console.log(data.account.role);
         this.$store.commit('setName', data.account.name);
         this.$store.commit('setToken', data.token);
         saveUserToCookie(data.account.name);
         saveAuthCookie(data.token);
         if (data.account.role === 'root') {
-          this.$router.push('/admin/main');
+          this.$router.push('/root/main');
         } else if (data.account.role === 'admin') {
           console.log(data.companyId);
           saveCompanyToCookie(data.companyId);
           saveUserIdToCookie(data.account.id);
-          this.$router.push('/manager/main');
+          this.$router.push('/admin/main');
         } else if (data.account.role === 'manager') {
           saveBranchToCookie(data.branchId);
-          this.$router.push('/branch/main');
+          this.$router.push('/manager/main');
         }
       } catch (error) {
         this.logMessage = error.response.data.message;
@@ -111,7 +101,7 @@ export default {
       }
     },
     initForm() {
-      this.email = '';
+      this.username = '';
       this.password = '';
     },
   },

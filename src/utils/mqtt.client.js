@@ -1,13 +1,10 @@
 import { log } from './logger';
 import { eventBus } from './eventBus';
-const mqtt = require('mqtt');
+import mqtt from 'mqtt';
 let client;
 
 async function initMqttClient(deviceList) {
-  console.log('mqtt');
-  console.log(deviceList);
-  // client = mqtt.connect('wss://mktop-broker.wisoft.io');
-  client = mqtt.connect('wss://192.168.10.250');
+  client = mqtt.connect('wss://mktop-broker.wisoft.io');
 
   const mqttRouter = require('mqtt-router').wrap(client);
 
@@ -18,20 +15,15 @@ async function initMqttClient(deviceList) {
 
   for (let i = 0; i < deviceList.length; i++) {
     mqttRouter.subscribe(
-      `/v1/device/${deviceList[i].deviceId}`,
+      `/v1/device/${deviceList[i].deviceId}/status`,
       { qos: 2 },
       (topic, message) => {
-        console.log('start');
-        let messa = JSON.parse(message);
-        // console.log(JSON.parse('topic' + ':' + topic));
-        let test = {
+        let json_message = JSON.parse(message);
+        let body = {
           id: deviceList[i].deviceId,
-          temperature: messa.temperature,
+          temperature: json_message.temperature,
         };
-        console.log(test);
-        // console.log(topic);
-        // console.log(JSON.parse(message));
-        eventBus.$emit('update', test);
+        eventBus.$emit('update', body);
       },
     );
   }
