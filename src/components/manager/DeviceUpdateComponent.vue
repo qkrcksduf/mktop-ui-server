@@ -5,7 +5,7 @@
         <v-flex xs12 sm8 lg4>
           <v-card class="elevation-12">
             <v-card-title style="color: white" class="grey darken-2">
-              장치 추가
+              장치 정보 수정
             </v-card-title>
             <v-container grid-list-sm>
               <v-layout row wrap>
@@ -41,7 +41,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 text
                 color="primary"
@@ -54,7 +54,7 @@
                     !location ||
                     !cautionValue
                 "
-                >update</v-btn
+                >변경하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>

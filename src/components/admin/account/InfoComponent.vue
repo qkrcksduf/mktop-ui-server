@@ -52,7 +52,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 :disabled="
                   !usernameValid ||
@@ -66,7 +66,7 @@
                 text
                 color="primary"
                 @click="updateInfo"
-                >Save</v-btn
+                >변경하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>

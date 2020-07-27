@@ -41,7 +41,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">취소하</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 text
                 :disabled="
