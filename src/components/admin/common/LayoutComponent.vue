@@ -59,7 +59,7 @@ export default {
         {
           icon: 'mdi-account',
           text: '계정 관리',
-          url: '/admin/account',
+          url: '/admin/account/info-update',
           tree: null,
         },
         {
