@@ -23,11 +23,6 @@
                     v-model="username"
                     placeholder="아이디(이메일 형식)"
                   ></v-text-field>
-                  <p class="validation-text">
-                    <span class="warn" v-if="!usernameValid && username">
-                      이메일 형식이 아닙니다.
-                    </span>
-                  </p>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
