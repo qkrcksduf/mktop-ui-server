@@ -49,9 +49,8 @@ export default {
         this.$store.getters.isLogin
           ? this.$router.push('/root/main')
           : this.$router.push('/login');
-      } catch (e) {
-        console.log('test');
-        console.log(e);
+      } catch (error) {
+        console.log(error);
       }
     },
 

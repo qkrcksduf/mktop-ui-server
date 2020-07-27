@@ -104,7 +104,7 @@ export default {
       try {
         if (confirm('정말로 삭제하시겠습니까?')) {
           await deleteCompanyById(id);
-          this.$router.go();
+          this.$router.go(0);
         }
       } catch (error) {
         alert(error.response.data.message);
