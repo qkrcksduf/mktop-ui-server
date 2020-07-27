@@ -55,8 +55,7 @@
               <v-btn text @click="cancel">Cancel</v-btn>
               <v-btn
                 :disabled="
-                  !usernameValid ||
-                    !emailValid ||
+                  !emailValid ||
                     !phoneNumberValid ||
                     !email ||
                     !username ||
