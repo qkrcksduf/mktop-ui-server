@@ -2,18 +2,51 @@
   <div>
     <v-navigation-drawer dark v-model="drawer" :clipped="true" app>
       <v-list dense>
-        <template v-for="item in items">
-          <v-list-item :key="item.text" :to="item.url">
-            <v-list-item-action :to="item.url">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ item.text }}
-              </v-list-item-title>
-            </v-list-item-content>
+        <v-list-item to="/admin/main">
+          <v-list-item-action>
+            <v-icon>
+              mdi-home
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-title>
+            메인 화면
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/admin/company-update">
+          <v-list-item-action>
+            <v-icon>
+              mdi-domain
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-title>
+            회사 관리
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-group prepend-icon="mdi-account" no-action>
+          <template v-slot:activator>
+            <v-list-item-title>계정 관리</v-list-item-title>
+          </template>
+          <v-list-item to="/admin/account/info-update">
+            <v-list-item-title>
+              계정 정보 변경
+            </v-list-item-title>
           </v-list-item>
-        </template>
+          <v-list-item to="/admin/account/password-update">
+            <v-list-item-title>
+              비밀번호 변경
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-group>
+        <v-list-item to="/admin/branch">
+          <v-list-item-action>
+            <v-icon>
+              mdi-package
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-title>
+            지점 관리
+          </v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 

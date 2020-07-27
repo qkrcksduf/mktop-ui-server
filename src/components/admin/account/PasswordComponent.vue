@@ -12,7 +12,7 @@
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-account-key"
-                    :type="show1 ? 'text' : 'password'"
+                    :type="show1 ? 'password' : 'text'"
                     v-model="currentPassword"
                     placeholder="현재 비밀번호"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -23,7 +23,7 @@
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-account"
-                    :type="show2 ? 'text' : 'password'"
+                    :type="show2 ? 'password' : 'text'"
                     v-model="changePassword"
                     placeholder="새 비밀번호"
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -33,7 +33,7 @@
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-account"
-                    :type="show3 ? 'text' : 'password'"
+                    :type="show3 ? 'password' : 'text'"
                     v-model="checkChangePassword"
                     placeholder="새 비밀번호 확인"
                     :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
