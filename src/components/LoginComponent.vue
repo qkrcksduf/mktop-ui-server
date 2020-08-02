@@ -5,7 +5,7 @@
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12" width="500">
             <v-toolbar color="deep-purple accent-4" dark flat>
-              <v-toolbar-title>Login form</v-toolbar-title>
+              <v-toolbar-title>로그인 페이지</v-toolbar-title>
             </v-toolbar>
             <v-form @submit.prevent="submitForm">
               <v-card-text>
@@ -95,7 +95,9 @@ export default {
           this.$router.push('/manager/main');
         }
       } catch (error) {
-        this.logMessage = error.response.data.message;
+        if (error.response.data.statusCode === 401) {
+          this.logMessage = '사용자 정보가 옳바르지 않습니다.';
+        }
       } finally {
         this.initForm();
       }

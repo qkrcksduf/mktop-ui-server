@@ -41,7 +41,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 text
                 color="primary"
@@ -54,7 +54,7 @@
                     !location ||
                     !cautionValue
                 "
-                >Create</v-btn
+                >생성하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>

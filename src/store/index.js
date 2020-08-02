@@ -16,6 +16,9 @@ export default new Vuex.Store({
     isMain(state) {
       return state.main;
     },
+    getName(state) {
+      return state.name;
+    },
   },
   mutations: {
     clearToken(state) {
