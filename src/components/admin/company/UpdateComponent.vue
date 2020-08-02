@@ -41,7 +41,7 @@
                   <v-checkbox
                     v-model="canUpdateInfoByRoot"
                     style="color: red"
-                    label="고객사 정보 변경에 대한 권한 부여"
+                    label="회사 정보에 대한 변경 권한을 MKTOP 관리자에게 부여합니다."
                   ></v-checkbox>
                 </v-flex>
               </v-layout>

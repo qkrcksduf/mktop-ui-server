@@ -11,7 +11,7 @@
               <v-layout row wrap>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-account"
+                    prepend-icon="mdi-message"
                     v-model="name"
                     placeholder="이름"
                   >
@@ -19,16 +19,16 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
-                    prepend-icon="mdi-key"
+                    prepend-icon="mdi-account"
                     v-model="username"
-                    placeholder="아이디(이메일 형식)"
+                    placeholder="아이디"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field
                     prepend-icon="mdi-email"
                     v-model="email"
-                    placeholder="email"
+                    placeholder="이메일"
                   ></v-text-field>
                   <p class="validation-text">
                     <span class="warn" v-if="!emailValid && email">
@@ -52,7 +52,7 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancel">취소하기</v-btn>
               <v-btn
                 :disabled="
                   !emailValid ||
@@ -65,7 +65,7 @@
                 text
                 color="primary"
                 @click="updateInfo"
-                >Save</v-btn
+                >변경하기</v-btn
               >
             </v-card-actions>
             <p class="log">{{ logMessage }}</p>
@@ -76,9 +76,10 @@
   </v-content>
 </template>
 <script>
-import { getUserIdFromCookie } from '@/utils/cookies';
+import { getUserIdFromCookie, saveUserToCookie } from '@/utils/cookies';
 import { selectAccountById, updateInfoById } from '@/api/accunt';
 import { validatePhoneNumber, validateEmail } from '@/utils/validation';
+import { deleteCookie } from '../../../utils/cookies';
 
 export default {
   name: 'AccountComponent',
@@ -136,6 +137,9 @@ export default {
           phoneNumber: this.phoneNumber,
         });
         console.log(data);
+        deleteCookie('user');
+        saveUserToCookie(this.name);
+        this.$store.commit('setName', this.name);
         this.$router.push('/admin/main');
       } catch (error) {
         this.logMessage = error.response.data.message;
