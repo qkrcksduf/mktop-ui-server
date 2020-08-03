@@ -38,7 +38,7 @@
                   white
                   type="submit"
                   style="color: white"
-                  >Login</v-btn
+                  >로그인</v-btn
                 >
               </v-card-actions>
             </v-form>
@@ -95,6 +95,9 @@ export default {
           this.$router.push('/manager/main');
         }
       } catch (error) {
+        if (error.response.data.statusCode === 204) {
+          this.logMessage = '등록되지 않은 사용자입니다.';
+        }
         if (error.response.data.statusCode === 401) {
           this.logMessage = '사용자 정보가 옳바르지 않습니다.';
         }
