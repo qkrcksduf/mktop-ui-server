@@ -12,8 +12,8 @@ function insertDevice(device) {
   return devices.post('/', device);
 }
 
-function updateDeviceById(device) {
-  return devices.put(`/${device.id}`, device);
+function updateDeviceById(device, id) {
+  return devices.put(`/${id}`, device);
 }
 
 function deleteDeviceById(id) {

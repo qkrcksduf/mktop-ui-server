@@ -30,12 +30,40 @@
                     placeholder="위치"
                   ></v-text-field>
                 </v-flex>
+                <v-flex xs6>
+                  <v-text-field
+                    v-model="maxValue"
+                    prepend-icon="mdi-plus"
+                    placeholder="최대온도"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs6>
+                  <v-text-field
+                    v-model="minValue"
+                    prepend-icon="mdi-minus"
+                    placeholder="최소온도"
+                  ></v-text-field>
+                  <p class="validation-text">
+                    <span class="warn" v-if="minValue && !minValueValid">
+                      최소 온도는 최대 온도보다 클 수 없습니다.
+                    </span>
+                  </p>
+                </v-flex>
+
                 <v-flex xs12>
                   <v-text-field
                     v-model="cautionValue"
                     prepend-icon="mdi-alert-circle"
                     placeholder="위험온도"
                   ></v-text-field>
+                  <p class="validation-text float-right">
+                    <span
+                      class="warn"
+                      v-if="cautionValue && !cautionValueValid"
+                    >
+                      경고 온도는 최대 온도보다 작을 수 없습니다.
+                    </span>
+                  </p>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -49,10 +77,13 @@
                 :disabled="
                   !cautionValueValid ||
                     !minValueValid ||
+                    !maxValueValid ||
                     !deviceName ||
                     !serial ||
                     !location ||
-                    !cautionValue
+                    !cautionValue ||
+                    !maxValue ||
+                    !minValue
                 "
                 >변경하기</v-btn
               >
@@ -97,6 +128,9 @@ export default {
     minValueValid() {
       return Number(this.minValue) <= Number(this.maxValue);
     },
+    maxValueValid() {
+      return Number(this.maxValue) <= Number(this.cautionValue);
+    },
     cautionValueValid() {
       return Number(this.cautionValue >= Number(this.maxValue));
     },
@@ -109,6 +143,8 @@ export default {
       this.serial = data.serial;
       this.location = data.location;
       this.cautionValue = data.cautionValue;
+      this.minValue = data.minValue;
+      this.maxValue = data.maxValue;
       console.log(data);
     },
 
@@ -119,15 +155,18 @@ export default {
 
     async update() {
       try {
-        const { data } = await updateDeviceById({
-          id: this.id,
-          name: this.deviceName,
-          location: this.location,
-          serial: this.serial,
-          minValue: this.minValue,
-          maxValue: this.maxValue,
-          cautionValue: this.cautionValue,
-        });
+        console.log(this.id);
+        const { data } = await updateDeviceById(
+          {
+            name: this.deviceName,
+            location: this.location,
+            serial: this.serial,
+            minValue: this.minValue,
+            maxValue: this.maxValue,
+            cautionValue: this.cautionValue,
+          },
+          this.id,
+        );
         console.log(data);
         this.$router.push('/manager/device');
       } catch (error) {
