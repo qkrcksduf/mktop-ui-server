@@ -3,6 +3,7 @@ const fs = require('fs');
 module.exports = {
   transpileDependencies: ['vuetify'],
   devServer: {
+    port: 443,
     https: true,
     https: {
       key: fs.readFileSync('/home/ubuntu/mktop/keys/privkey.pem'),
