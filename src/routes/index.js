@@ -87,7 +87,7 @@ const router = new VueRouter({
     },
     {
       path: '/manager/device-update/:id',
-      component: () => import('@/views/manager/UpdatePage'),
+      component: () => import('@/views/manager/DeviceUpdatePage'),
       meta: { auth: true },
     },
   ],

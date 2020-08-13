@@ -4,7 +4,10 @@ import mqtt from 'mqtt';
 let client;
 
 async function initMqttClient(deviceList) {
-  client = mqtt.connect('wss://mktop-broker.wisoft.io');
+  client = mqtt.connect('wss://wisoftlabs.ml:10001', {
+    username: 'mktop',
+    password: '1234',
+  });
 
   const mqttRouter = require('mqtt-router').wrap(client);
 
