@@ -3,11 +3,12 @@ const fs = require('fs');
 module.exports = {
   transpileDependencies: ['vuetify'],
   devServer: {
+    port: 443,
     https: true,
     https: {
-      key: fs.readFileSync('/home/ubuntu/mktop/privkey.pem'),
-      cert: fs.readFileSync('/home/ubuntu/mktop/cert.pen'),
-      ca: fs.readFileSync('/home/ubuntu/mktop/chain.pen'),
+      key: fs.readFileSync('/home/ubuntu/mktop/keys/privkey.pem'),
+      cert: fs.readFileSync('/home/ubuntu/mktop/keys/cert.pem'),
+      ca: fs.readFileSync('/home/ubuntu/mktop/keys/fullchain.pem'),
     },
     headers: {
       'Access-Control-Allow-Origin': '*',
